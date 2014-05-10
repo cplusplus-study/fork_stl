@@ -1,0 +1,23 @@
+project 
+	:
+		requirements
+		<include>./include <threading>multi
+		<toolset>gcc,<toolset>clang:<cxxflags>-std=c++11,<cflags>-std=c++11,<linkflags>-std=c++11
+		<toolset>msvc:<runtime-link>static
+	:
+		default-build
+		<link>static
+		<variant>release
+	:
+		build-dir ./build
+	;
+
+build-project test ;
+
+install all-test 
+	: test 
+	: 
+	<variant>release:<location>./bin/release/
+	<variant>debug:<location>./bin/debug/
+	<install-dependencies>on <install-type>EXE <install-type>LIB
+	;

@@ -1,0 +1,23 @@
+project :
+		usage-requirements
+			<include>gtest-1.7.0/include
+			<link>shared:<define>GTEST_LINKED_AS_SHARED_LIBRARY=1
+		;
+
+lib gtest
+	: "gtest-1.7.0/src/gtest-all.cc"
+	: 
+	<include>gtest-1.7.0
+	<include>gtest-1.7.0/include
+	<threading>multi
+	<link>shared:<define>GTEST_CREATE_SHARED_LIBRARY=1
+	;
+
+lib gtest_main
+	: gtest-1.7.0/src/gtest-main.cc
+	: 
+	<include>gtest-1.7.0
+	<include>gtest-1.7.0/include
+	<threading>multi
+	<link>shared:<define>GTEST_CREATE_SHARED_LIBRARY=1
+	;
