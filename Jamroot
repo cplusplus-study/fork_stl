@@ -2,8 +2,7 @@ project
 	:
 		requirements
 		<include>./include <threading>multi
-		<toolset>gcc,<toolset>clang:<cxxflags>-std=c++11,<cflags>-std=c++11,<linkflags>-std=c++11
-		<toolset>msvc:<runtime-link>static
+		<conditional>@cpp11-rule
 	:
 		default-build
 		<link>static
@@ -12,12 +11,22 @@ project
 		build-dir ./build
 	;
 
-build-project test ;
-
-install all-test 
-	: test 
+install stage
+	: test
+	  src
 	: 
 	<variant>release:<location>./bin/release/
 	<variant>debug:<location>./bin/debug/
 	<install-dependencies>on <install-type>EXE <install-type>LIB
 	;
+
+
+rule cpp11-rule ( properties * ) {
+    local result ;
+    if <toolset>gcc in $(properties) || <toolset>clang in $(properties) {
+        result += <cxxflags>-std=c++11 ;
+        result += <cflags>-std=c++11 ;
+        result += <linkflags>-std=c++11 ;
+    }
+    return $(result) ;
+}
