@@ -18,14 +18,16 @@ struct __get_result_type<R(*)(Args...)>{ typedef R type; };
 template<typename R, typename... Args>
 struct __get_result_type<R(&)(Args...)>{ typedef R type; };
 
+template<typename Mem,typename C>
+struct __get_result_type<Mem(C::*)>{ typedef decltype(((C*)0)->*((Mem(C::*))0)) type; typedef C class_type; };
 template<typename R,typename C, typename... Args>
-struct __get_result_type<R(C::*)(Args...)>{ typedef R type; };
+struct __get_result_type<R(C::*)(Args...)>{ typedef R type;  typedef C class_type; };
 template<typename R,typename C, typename... Args>
-struct __get_result_type<R(C::*)(Args...)const>{ typedef R type; };
+struct __get_result_type<R(C::*)(Args...)const>{ typedef R type;  typedef C class_type; };
 template<typename R,typename C, typename... Args>
-struct __get_result_type<R(C::*)(Args...)volatile>{ typedef R type; };
+struct __get_result_type<R(C::*)(Args...)volatile>{ typedef R type;  typedef C class_type; };
 template<typename R,typename C, typename... Args>
-struct __get_result_type<R(C::*)(Args...)const volatile>{ typedef R type; };
+struct __get_result_type<R(C::*)(Args...)const volatile>{ typedef R type;  typedef C class_type; };
 
 
 // __invoke(F, Args...)
@@ -51,9 +53,9 @@ auto __invoke(F&& __f, Arg0&& obj_Or_objPtr)
 
 template<typename F, typename Arg0, typename... Args>
 auto __invoke(F&& __f, Arg0&& obj_Or_objPtr, Args... args)
-    -> decltype((std::forward<Arg0>(obj_Or_objPtr).*std::forward<F>(__f))(std::forward<Args>(args)...))
+    -> decltype(((std::forward<Arg0>(obj_Or_objPtr)).*std::forward<F>(__f))(std::forward<Args>(args)...))
 {
-    return (std::forward<Arg0>(obj_Or_objPtr).*std::forward<F>(__f))(std::forward<Args>(args)...);
+    return ((std::forward<Arg0>(obj_Or_objPtr)).*std::forward<F>(__f))(std::forward<Args>(args)...);
 }
 
 template<typename F, typename Arg0, typename... Args>
@@ -67,7 +69,6 @@ template<typename F, typename... Args>
 struct __invoke_return_type{
     typedef decltype(__invoke(std::declval<F>(), std::declval<Args>()...)) type;
 };
-
 
 } // base
 } // namespace

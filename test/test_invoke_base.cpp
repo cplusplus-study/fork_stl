@@ -21,6 +21,7 @@ int test_add(int a, int b){
 
 class AAA{
 public:
+    AAA(){ }
     int operator()(int a, int b){ return a+b; }
     double operator()(int a, int b, int c){ return a+b+c; }
     void operator()(int a){ }

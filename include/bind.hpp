@@ -20,38 +20,55 @@ namespace xusd{
     template <unsigned N, unsigned...S> struct gen: gen<N-1, N-1, S...>{ };
     template <unsigned...S> struct gen<0, S...>{ typedef seq<S...> type; };
 
-    template <int N, typename B, typename C>
-    auto select(std::false_type, B&& b, C&& c) -> decltype(std::get<N>(b)){
-        return std::get<N>(b);
+    template<bool c, typename T, typename F>
+    struct if_;
+    template<typename T, typename F>
+    struct if_<true, T, F>{ typedef T type; };
+    template<typename T, typename F>
+    struct if_<false, T, F>{ typedef F type; };
+
+    template <typename B, typename C>
+    auto select(B&& b, C&& c, typename std::enable_if<is_placeholder<typename std::decay<B>::type>::value == 0>::type* = 0) -> B&& {
+        return std::forward<B>(b);
+    }
+    template <typename B, typename C>
+    auto select(std::reference_wrapper<B> b, C&& c) -> decltype(b.get()) {
+        return b.get();
     }
 
-    template <int N, typename B, typename C>
-    auto select(std::true_type, B&& b, C&& c) ->
-    decltype(std::get< is_placeholder< typename std::tuple_element< N, typename std::decay<B>::type >::type >::value -1 >(c)) {
-        return std::get< is_placeholder< typename std::tuple_element< N, typename std::decay<B>::type >::type >::value -1 >(c);
+
+    template <int N, typename C>
+    auto select(placeholder<N> b, C&& c) -> typename if_<std::is_rvalue_reference<typename std::tuple_element<N-1, typename std::decay<C>::type>::type>::value,typename std::tuple_element<N-1, typename std::decay<C>::type>::type,decltype(std::get<N-1>(c))>::type {
+        return static_cast<typename if_<std::is_rvalue_reference<typename std::tuple_element<N-1, typename std::decay<C>::type>::type>::value,typename std::tuple_element<N-1, typename std::decay<C>::type>::type,decltype(std::get<N-1>(std::forward<C>(c)))>::type>(std::get<N-1>(std::forward<C>(c)));
     }
+
+    template<typename F, typename BindArgs, typename CallArgs, typename Gen = typename gen<std::tuple_size<BindArgs>::value>::type >
+    struct __bind_return_type;
+
+    template<typename F, typename... BindArgs, typename... CallArgs, int ...S>
+    struct __bind_return_type<F, std::tuple<BindArgs...>, std::tuple<CallArgs...> , seq<S...> >{
+        typedef decltype(base::__invoke(std::declval<F>(),select(std::get<S>(std::declval<typename std::tuple<BindArgs...>>()), std::declval<typename std::tuple<CallArgs...>&>())...)) type;
+    };
 
     template<typename F, typename... Args>
     class bind_t {
-        typedef std::tuple<Args...> BindArgs;
-        typedef F CallFun;
+        typedef std::tuple<typename std::decay<Args>::type...> BindArgs;
+        typedef typename std::decay<F>::type CallFun;
     public:
-        typedef typename base::__get_result_type<F>::type result_type;
-
         bind_t(F fun, Args... args):_fun(fun), _bindArgs(args...){ }
 
         template<typename... CArgs>
-        result_type operator()(CArgs&&... c){
-            std::tuple<CArgs...> cargs(c...);
+        typename __bind_return_type<CallFun, BindArgs, typename std::tuple<CArgs&&...>>::type operator()(CArgs&&... c){
+            std::tuple<CArgs&&...> cargs(std::forward<CArgs>(c)...);
             return _call(cargs, typename gen<std::tuple_size<BindArgs>::value>::type());
         }
 
     private:
         template<typename T, int ...S>
-        result_type _call(T&& t, seq<S...>){ 
-            base::__invoke(_fun,select<S>( std::integral_constant< bool, is_placeholder< typename std::tuple_element<S, BindArgs>::type >::value != 0 >(), _bindArgs, t)...);
+        typename __bind_return_type<CallFun, BindArgs, typename std::decay<T>::type>::type _call(T&& t, seq<S...>){
+            return base::__invoke(_fun,select(std::get<S>(_bindArgs), std::forward<T>(t))...);
         }
-    private:
+
         CallFun _fun;
         BindArgs _bindArgs;
     };
