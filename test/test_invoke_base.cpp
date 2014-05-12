@@ -4,15 +4,15 @@
 
 TEST(TestInvokeBase, __get_result_type){
 
-    EXPECT_TRUE((std::is_same<class A, xusd::base::__get_result_type<class A(class B)>::type>::value));
-    EXPECT_TRUE((std::is_same<class A, xusd::base::__get_result_type<class A(&)(class B)>::type>::value));
-    EXPECT_TRUE((std::is_same<class A, xusd::base::__get_result_type<class A(*)(class B)>::type>::value));
+    class A{}; class B{}; class C{}; class D{};
+    EXPECT_TRUE((std::is_same< A, xusd::base::__get_result_type< A( B)>::type>::value));
+    EXPECT_TRUE((std::is_same< A, xusd::base::__get_result_type< A(&)( B)>::type>::value));
+    EXPECT_TRUE((std::is_same< A, xusd::base::__get_result_type< A(*)( B)>::type>::value));
 
-    class C;
-    EXPECT_TRUE((std::is_same<class A, xusd::base::__get_result_type<class A(C::*)(class B)>::type>::value));
-    EXPECT_TRUE((std::is_same<class A, xusd::base::__get_result_type<class A(C::*)(class B)const>::type>::value));
-    EXPECT_TRUE((std::is_same<class A, xusd::base::__get_result_type<class A(C::*)(class B)volatile>::type>::value));
-    EXPECT_TRUE((std::is_same<class A, xusd::base::__get_result_type<class A(C::*)(class B)const volatile>::type>::value));
+    EXPECT_TRUE((std::is_same< A, xusd::base::__get_result_type< A(C::*)( B)>::type>::value));
+    EXPECT_TRUE((std::is_same< A, xusd::base::__get_result_type< A(C::*)( B)const>::type>::value));
+    EXPECT_TRUE((std::is_same< A, xusd::base::__get_result_type< A(C::*)( B)volatile>::type>::value));
+    EXPECT_TRUE((std::is_same< A, xusd::base::__get_result_type< A(C::*)( B)const volatile>::type>::value));
 }
 
 int test_add(int a, int b){

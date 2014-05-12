@@ -4,6 +4,7 @@
 #include <cstdlib>
 #include <string>
 #include <iostream>
+#include <functional> //ref, cref
 #include <bind.hpp>
 #include <gtest/gtest.h>
 
@@ -125,7 +126,7 @@ TEST(TestGetResult, Test1){
 }
 
 #define DT(x) decltype(x)
-TEST(TestBind_t, Test1){
+TEST(TestBind_t, TestResultType){
     using namespace xusd;
     EXPECT_TRUE((std::is_same<void, decltype(std::declval<bind_t<void ()>>()())>::value));
     EXPECT_TRUE((std::is_same<void, decltype(std::declval<bind_t<void (char), DT((_1))>>()('a'))>::value));
@@ -133,38 +134,6 @@ TEST(TestBind_t, Test1){
     EXPECT_TRUE((std::is_same<void, decltype(std::declval<bind_t<void (char,short, int), DT((_1)), DT((_2)), DT((_3))>>()('1', (short)2, 3))>::value));
     EXPECT_TRUE((std::is_same<void, decltype(std::declval<bind_t<void (char,short, int, long), DT((_1)), DT((_2)), DT((_3)), DT((_4))>>()('a',short(2), int(3), long(4)))>::value));
     EXPECT_TRUE((std::is_same<void, decltype(std::declval<bind_t<void (char,short, int, long, long long), DT((_1)), DT((_2)), DT((_3)), DT((_4)), DT((_5))>>()(char(1),short(2), int(3), long(4), (long long)(5)))>::value));
-
-
-    //EXPECT_TRUE((std::is_same<int, decltype(std::declval<bind_t<int ()>>()())>::value));
-    //EXPECT_TRUE((std::is_same<int, decltype(std::declval<bind_t<int (char), DT((_1))>>()())>::value));
-    //EXPECT_TRUE((std::is_same<int, decltype(std::declval<bind_t<int (char,short), DT((_1)), DT((_2))>>()())>::value));
-    //EXPECT_TRUE((std::is_same<int, decltype(std::declval<bind_t<int (char,short, int), DT((_1)), DT((_2)), DT((_3))>>()())>::value));
-    //EXPECT_TRUE((std::is_same<int, decltype(std::declval<bind_t<int (char,short, int, long), DT((_1)), DT((_2)), DT((_3)), DT((_4))>>()())>::value));
-    //EXPECT_TRUE((std::is_same<int, decltype(std::declval<bind_t<int (char,short, int, long, long long), DT((_1)), DT((_2)), DT((_3)), DT((_4)), DT((_5))>>()())>::value));
-
-
-    //EXPECT_TRUE((std::is_same<class AAA, bind_t<class AAA ()>::result_type>::value));
-    //EXPECT_TRUE((std::is_same<class AAA, bind_t<class AAA (char), DT((_1))>::result_type>::value));
-    //EXPECT_TRUE((std::is_same<class AAA, bind_t<class AAA (char,short), DT((_1)), DT((_2))>::result_type>::value));
-    //EXPECT_TRUE((std::is_same<class AAA, bind_t<class AAA (char,short, int), DT((_1)), DT((_2)), DT((_3))>::result_type>::value));
-    //EXPECT_TRUE((std::is_same<class AAA, bind_t<class AAA (char,short, int, long), DT((_1)), DT((_2)), DT((_3)), DT((_4))>::result_type>::value));
-    //EXPECT_TRUE((std::is_same<class AAA, bind_t<class AAA (char,short, int, long, long long), DT((_1)), DT((_2)), DT((_3)), DT((_4)), DT((_5))>::result_type>::value));
-
-
-    //EXPECT_TRUE((std::is_same<class AAA, bind_t<class AAA (class BBB), DT((_1))>::result_type>::value));
-    //EXPECT_TRUE((std::is_same<class AAA, bind_t<class AAA (class BBB, class CCC), DT((_1))>::result_type>::value));
-    //EXPECT_TRUE((std::is_same<class AAA, bind_t<class AAA (class BBB, class CCC, class DDD), DT((_1))>::result_type>::value));
-    //EXPECT_TRUE((std::is_same<class AAA, bind_t<class AAA (class BBB, class CCC, class DDD, class EEE), DT((_1))>::result_type>::value));
-    //EXPECT_TRUE((std::is_same<class AAA, bind_t<class AAA (class BBB, class CCC, class DDD, class EEE, class FFF), DT((_1))>::result_type>::value));
-    //EXPECT_TRUE((std::is_same<class AAA, bind_t<class AAA (class BBB, class CCC, class DDD, class EEE, class FFF, class GGG), DT((_1))>::result_type>::value));
-
-
-    //EXPECT_TRUE((std::is_same<class Ret, bind_t<class Ret (class Arg1), DT((_1))>::result_type>::value));
-    //EXPECT_TRUE((std::is_same<class Ret, bind_t<class Ret (class Arg1, class Arg2), DT((_2)), DT((_1))>::result_type>::value));
-    //EXPECT_TRUE((std::is_same<class Ret, bind_t<class Ret (class Arg1, class Arg2, class Arg3), DT((_2)), DT((_1))>::result_type>::value));
-    //EXPECT_TRUE((std::is_same<class Ret, bind_t<class Ret (class Arg1, class Arg2, class Arg3, class Arg4),DT((_4)), DT((_1))>::result_type>::value));
-    //EXPECT_TRUE((std::is_same<class Ret, bind_t<class Ret (class Arg1, class Arg2, class Arg3, class Arg4, class Arg5), DT((_5))>::result_type>::value));
-    //EXPECT_TRUE((std::is_same<class Ret, bind_t<class Ret (class Arg1, class Arg2, class Arg3, class Arg4, class Arg5, class Arg6), DT((_6))>::result_type>::value));
 }
 
 TEST(TestBind_t, Test2){
@@ -447,6 +416,159 @@ void test()
     //////////////////////////////////////////////////////////////////////////
 }
 //
+
+
+int freeFun(int x , int y){
+    return x*y;
+}
+
+TEST(TestBind2, TestFreeFunc){
+    using namespace xusd;
+    auto freeFun1 = xusd::bind(&freeFun, _1, _2);
+    auto freeFun2 = xusd::bind(&freeFun, 3, _1);
+    auto freeFun3 = xusd::bind(&freeFun, 3, 2);
+    EXPECT_EQ(6, (freeFun1(2,3)));
+    EXPECT_EQ(6, (freeFun2(2)));
+    EXPECT_EQ(6, (freeFun3()));
+}
+
+int overLoadFreeFun(int x, int y){
+    return x + y;
+}
+double overLoadFreeFun(double x, double y){
+    return x * y;
+}
+
+TEST(TestBind2, TestFreeFunc_OverLoad){
+    using namespace xusd;
+    auto f1 = xusd::bind((int(*)(int, int))&overLoadFreeFun, _1, _2);
+    auto f2 = xusd::bind((double(*)(double, double))&overLoadFreeFun, _1, _2);
+    EXPECT_EQ(5, (f1(2,3)));
+    EXPECT_EQ(6, (f2(2,3)));
+}
+
+template<typename T1, typename T2>
+auto TmplFun(T1 t1, T2 t2) -> decltype(t1+t2){
+    return t1 + t2;
+}
+TEST(TestBind2, TestFreeFunc_Template){
+    using namespace xusd;
+    auto f1 = bind((int(*)(int, int))&TmplFun, _1, _2);
+    auto f2 = bind((double(*)(int, double))&TmplFun, _1, _2);
+    EXPECT_TRUE((std::is_same<int, decltype(f1(1,2))>::value));
+    EXPECT_TRUE((std::is_same<double, decltype(f2(1,2))>::value));
+    EXPECT_EQ(3, (f1(1, 2)));
+    EXPECT_EQ(3, (f2(1, 2.0)));
+}
+
+using namespace xusd;
+class AAA{
+public:
+    int mfun1(int x, int y){
+        return x*y;
+    }
+
+    AAA():_i(0){ }
+    AAA(AAA&&o):_i(o._i){ }
+    explicit AAA(int i):_i(i){ }
+    void set(int i){ _i = i; }
+    int get(){ return _i; }
+    AAA* thisPointer(){
+        return this;
+    }
+
+private:
+    int _i = 0;
+};
+TEST(TestBind2, TestMemberFunc){
+    AAA a1;
+    auto f1 = xusd::bind(&AAA::mfun1, std::ref(a1), _2, _1);
+    auto f2 = xusd::bind(&AAA::mfun1, &a1, _2, _1);
+    auto f3 = xusd::bind(&AAA::mfun1, _3, _2, _1);
+    auto f4 = xusd::bind(&AAA::mfun1, _1, _2, _3);
+
+    auto get = xusd::bind(&AAA::get, _1);
+    auto pointer = xusd::bind(&AAA::thisPointer, _1);
+
+    EXPECT_EQ(14, (f1(7, 2)));
+    EXPECT_EQ(10, (f2(5, 2)));
+    EXPECT_EQ(10, (f3(5, 2, a1)));
+    EXPECT_EQ(10, (f3(5, 2, &a1)));
+    EXPECT_EQ(10, (f4(&a1, 2, 5)));
+    EXPECT_EQ(10, (f4(a1, 2, 5)));
+
+
+    EXPECT_EQ(0, (get(&a1)));
+    a1.set(1);
+    EXPECT_EQ(1, (get(&a1)));
+
+    EXPECT_EQ(&a1, pointer(&a1));
+    EXPECT_EQ(&a1, pointer(a1));
+    auto p1 = &a1;
+    auto p2 = pointer(std::move(a1));
+    EXPECT_NE(p1, p2); // ? 
+}
+
+class BBB{
+public:
+    int fun1(int x, int y){ return x + y; }
+    std::string fun1(std::string a, std::string b){ return a+b; }
+};
+TEST(TestBind2, TestMemberFunc_Overload){
+    BBB b;
+    auto f1 = xusd::bind((int(BBB::*)(int , int))&BBB::fun1, std::ref(b), _2, _1);
+    auto f2 = xusd::bind((std::string(BBB::*)(std::string , std::string))&BBB::fun1,&b, _2, _1);
+
+    ASSERT_EQ(3, f1(1, 2));
+    ASSERT_EQ(std::string("21"), f2("1", "2"));
+}
+class CCC{
+public:
+    template<typename T1, typename T2>
+    auto fun1(T1 x, T2 y) -> decltype(x+y){ return  x+y; }
+};
+TEST(TestBind2, TestMemberFunc_Template){
+    CCC c;
+    auto f1 = xusd::bind((int(CCC::*)(int , int))&CCC::fun1, std::ref(c), _2, _1);
+    auto f2 = xusd::bind((std::string(CCC::*)(std::string , std::string))&CCC::fun1,&c, _2, _1);
+
+    ASSERT_EQ(3, f1(1, 2));
+    ASSERT_EQ(std::string("21"), f2("1", "2"));
+}
+class DDD{
+public:
+    DDD():_i(0){ }
+    int fun1(int x, int y) { _i = x+y; return  x+y; }
+    int fun1(int x, int y) const { return x*y; }
+private:
+    int _i;
+};
+
+TEST(TestBind2, TestMemberFunc_Const){
+    DDD d1;
+    const DDD d2;
+    auto f1 = xusd::bind((int(DDD::*)(int , int))&DDD::fun1, _1, _2, _3);
+    auto f2 = xusd::bind((int(DDD::*)(int , int) const)&DDD::fun1, _1, _2, _3);
+
+    ASSERT_EQ(9, f1(d1, 2, 7));
+    ASSERT_EQ(14, f2(d1, 2, 7));
+
+    ASSERT_EQ(21, f2(d2, 3, 7));
+
+}
+
+TEST(TestBind2, TestLambda){
+    auto l1 = [](int x,  int y){ return x*y; };
+    auto f1 = xusd::bind(l1, _2, _1);
+    ASSERT_EQ(2, f1(1, 2));
+    ASSERT_EQ(std::string("yyxx"), (xusd::bind([](std::string x, std::string y) -> std::string { return x + y; }, _2, _1)(std::string("xx"), std::string("yy"))));
+}
+TEST(TestBind2, TestFunctionObject){
+    auto l1 = [](int x,  int y){ return x*y; };
+    auto f1 = xusd::bind(xusd::bind(l1, _2, _1), _1, 5);
+    ASSERT_EQ(10, f1(2));
+}
+
 int main(int argc, char* argv[]){
 
     ::testing::InitGoogleTest(&argc, argv);
