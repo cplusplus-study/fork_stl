@@ -1,16 +1,13 @@
+// -*- C++ -*-
+
+#ifndef __FORK_STL__RATIO__
+#define __FORK_STL__RATIO__
 #include <cstdint>
 #include <climits>
 #include <limits>
 #include <type_traits>
 
 namespace xusd{
-
-    // -- gen {{{ 
-    template <int ...N> struct seq{ };
-    template <unsigned N, unsigned...S> struct gen;
-    template <unsigned N, unsigned...S> struct gen: gen<N-1, N-1, S...>{ };
-    template <unsigned...S> struct gen<0, S...>{ typedef seq<S...> type; };
-    // }}}
 
     // -- ratio {{{ 
     template <intmax_t _X, intmax_t _Y>
@@ -187,3 +184,5 @@ namespace xusd{
     template <intmax_t _Num, intmax_t _Den> struct __is_ratio<ratio<_Num, _Den> > : std::true_type  {};
     //}}} ratio
 }
+
+#endif

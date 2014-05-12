@@ -7,6 +7,7 @@
 #include <tuple>
 #include <functional>
 #include <base/__invoke_base.hpp>
+#include <base/__mpl_tools.hpp>
 
 namespace xusd{
     template <int NUM> struct placeholder{ };
@@ -15,17 +16,6 @@ namespace xusd{
     template <int NUM> struct is_placeholder<placeholder<NUM> >{ enum{ value = NUM }; };
     template <typename T> struct is_placeholder{ enum{ value = 0 }; };
 
-    template <int ...N> struct seq{ };
-    template <unsigned N, unsigned...S> struct gen;
-    template <unsigned N, unsigned...S> struct gen: gen<N-1, N-1, S...>{ };
-    template <unsigned...S> struct gen<0, S...>{ typedef seq<S...> type; };
-
-    template<bool c, typename T, typename F>
-    struct if_;
-    template<typename T, typename F>
-    struct if_<true, T, F>{ typedef T type; };
-    template<typename T, typename F>
-    struct if_<false, T, F>{ typedef F type; };
 
     template <typename B, typename C>
     auto select(B&& b, C&& c) -> B&& {

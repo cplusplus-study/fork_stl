@@ -3,3 +3,4 @@ exe test_tuple : test_tuple.cpp ../lib//gtest ;
 exe test_invoke_base : test_invoke_base.cpp ../lib//gtest ;
 exe test_bind : test_bind.cpp ../lib//gtest ../src//nullc++ ;
 exe test_ratio : test_ratio.cpp ../lib//gtest ../src//nullc++ ;
+exe test_chrono : test_chrono.cpp ../lib//gtest ../src//nullc++ ;
