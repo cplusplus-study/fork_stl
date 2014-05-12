@@ -9,7 +9,7 @@ TEST(TestThread, test__thread_execute){
     EXPECT_EQ(x, 3);
     typedef std::tuple<decltype(f1)> mytuple;
     mytuple f2(f1);
-    xusd::__thread_execute(f2, xusd::seq<>());
+    xusd::__thread_execute(f2, xusd::seq<0>());
 }
 
 int g_test_thread_run_count = 0;

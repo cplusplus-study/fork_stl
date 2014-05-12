@@ -1,3 +1,7 @@
+// -*- C++ -*-
+
+#ifndef __FORK_STL__THREAD__
+#define __FORK_STL__THREAD__
 #include <unistd.h>
 #include <pthread.h>
 #include <ostream>
@@ -10,6 +14,7 @@
 #include <type_traits>
 #include <memory>
 #include <chrono.hpp>
+#include <bind.hpp>
 #include <base/__mpl_tools.hpp>
 #include <base/__invoke_base.hpp>
 
@@ -17,13 +22,13 @@ namespace xusd {
 
     template <class _Fp, class ..._Args, int ..._Indices>
     inline void __thread_execute(std::tuple<_Fp, _Args...>& __t, seq<_Indices...>) {
-        std::move(std::get<0>(std::move(__t)))(std::move(std::get<_Indices + 1>(__t))...);
+        xusd::base::__invoke(std::move(std::get<_Indices>(__t))...);
     }
 
     template <class _Fp>
     void* __thread_proxy(void* __vp) {
         std::unique_ptr<_Fp> __p(static_cast<_Fp*>(__vp));
-        typedef typename gen<std::tuple_size<_Fp>::value - 1>::type _Index;
+        typedef typename gen<std::tuple_size<_Fp>::value>::type _Index;
         __thread_execute(*__p, _Index());
         return nullptr;
     }
@@ -55,9 +60,9 @@ namespace xusd {
             std::unique_ptr<_Gp> __p(new _Gp(__decay_copy(std::forward<_Fp>(__f)), __decay_copy(std::forward<_Args>(__args))...));
 
             int __ec = ::pthread_create(&__t_, 0, &__thread_proxy<_Gp>, __p.get());
-            if (__ec == 0)
+            if (__ec == 0){
                 __p.release();
-            else{
+            } else {
                 throw std::system_error(std::error_code(__ec, std::system_category()), "thread construct failed");
             }
         }
@@ -1075,6 +1080,7 @@ namespace xusd {
     template <>
     class promise<void>
     {
+        template<typename> friend class packaged_task;
         typename std::shared_ptr<__assoc_state_base > __state_;
     public:
         promise(std::shared_ptr<__assoc_state_base >);
@@ -1140,7 +1146,7 @@ namespace xusd {
                 s->set_exception(std::current_exception());
             }
         };
-        auto ss = std::bind(myfun, __state_.get(),std::move(__f), std::move(args)...);
+        auto ss = xusd::bind(myfun, __state_.get(),std::move(__f), std::move(args)...);
         thread(std::move(ss)).detach();
 
         return std::move(f);
@@ -1150,7 +1156,7 @@ namespace xusd {
     future<void> __make_async_assoc_state(_Fp&& __f, Args&& ...args) {
         auto p = promise<void>();
         auto f  = p.get_future();
-        thread(std::bind([](promise<void>& pr, _Fp&& fun,Args&&...arg) -> void {
+        thread(xusd::bind([](promise<void>& pr, _Fp&& fun,Args&&...arg) -> void {
             try {
                 fun(arg...);
                 pr.set_value();
@@ -1181,7 +1187,7 @@ namespace xusd {
         catch ( ... ) { if (policy == launch::async) throw ; }
 
         if ((int(policy) & int(launch::deferred)) != 0){
-            return __make_deferred_assoc_state<_Rp>(std::bind(std::forward<F>(__f), std::forward<Args>(args)...));
+            return __make_deferred_assoc_state<_Rp>(xusd::bind(std::forward<F>(__f), std::forward<Args>(args)...));
         } else {
             return future<_Rp>{};
         }
@@ -1281,7 +1287,7 @@ namespace xusd {
         typedef void result_type;
 
         // construction and destruction
-        packaged_task() noexcept: __f_(), __p_(std::shared_ptr<__assoc_state<void>>(nullptr)){ }
+        packaged_task() noexcept: __f_(), __p_(std::shared_ptr<__assoc_state_base>(nullptr)){ }
         template <class F>
         explicit packaged_task(F&& f): __f_(std::move(f)), __p_(){ }
 
@@ -1363,3 +1369,4 @@ namespace xusd {
     //}}} packaged_task end
 
 }
+#endif

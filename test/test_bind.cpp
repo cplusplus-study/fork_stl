@@ -506,7 +506,7 @@ TEST(TestBind2, TestMemberFunc){
     EXPECT_EQ(&a1, pointer(a1));
     auto p1 = &a1;
     auto p2 = pointer(std::move(a1));
-    EXPECT_NE(p1, p2); // ? 
+    EXPECT_EQ(p1, p2); // ? 
 }
 
 class BBB{

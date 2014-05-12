@@ -126,7 +126,7 @@ namespace xusd {
                 <
                    std::is_convertible<Rep2, rep>::value &&
                    (treat_as_floating_point<rep>::value ||
-                   !treat_as_floating_point<rep>::value && !treat_as_floating_point<Rep2>::value)
+                   (!treat_as_floating_point<rep>::value && !treat_as_floating_point<Rep2>::value))
                 >::type* = 0): __rep_(r){ }
 
             // conversions
