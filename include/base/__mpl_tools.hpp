@@ -14,6 +14,13 @@ namespace xusd{
     struct if_<true, T, F>{ typedef T type; };
     template<typename T, typename F>
     struct if_<false, T, F>{ typedef F type; };
+
+    template <class _Tp>
+    inline typename std::decay<_Tp>::type
+    __decay_copy(_Tp&& __t) {
+        return std::forward<_Tp>(__t);
+    }
+
 }
 
 #endif

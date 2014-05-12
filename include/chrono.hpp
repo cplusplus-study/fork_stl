@@ -100,10 +100,10 @@ namespace xusd {
                 return 0;
             }
             static constexpr Rep max(){
-                std::numeric_limits<Rep>::max();
+                return std::numeric_limits<Rep>::max();
             }
             static constexpr Rep min(){
-                std::numeric_limits<Rep>::min();
+                return std::numeric_limits<Rep>::min();
             }
         };
 
