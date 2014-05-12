@@ -28,14 +28,13 @@ namespace xusd{
     struct if_<false, T, F>{ typedef F type; };
 
     template <typename B, typename C>
-    auto select(B&& b, C&& c, typename std::enable_if<is_placeholder<typename std::decay<B>::type>::value == 0>::type* = 0) -> B&& {
+    auto select(B&& b, C&& c) -> B&& {
         return std::forward<B>(b);
     }
     template <typename B, typename C>
     auto select(std::reference_wrapper<B> b, C&& c) -> decltype(b.get()) {
         return b.get();
     }
-
 
     template <int N, typename C>
     auto select(placeholder<N> b, C&& c) -> typename if_<std::is_rvalue_reference<typename std::tuple_element<N-1, typename std::decay<C>::type>::type>::value,typename std::tuple_element<N-1, typename std::decay<C>::type>::type,decltype(std::get<N-1>(c))>::type {
