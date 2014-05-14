@@ -1,3 +1,4 @@
+// -*- C++ -*-
 
 #ifndef __FROK_STL_UTILITY__
 #define __FROK_STL_UTILITY__

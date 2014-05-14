@@ -1,3 +1,4 @@
+// -*- C++ -*-
 
 #ifndef __FORK_STL__ITERATOR__
 #define __FORK_STL__ITERATOR__

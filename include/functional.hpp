@@ -1,3 +1,4 @@
+// -*- C++ -*-
 
 #ifndef __FORK_STL__FUNCTIONAL__
 #define __FORK_STL__FUNCTIONAL__

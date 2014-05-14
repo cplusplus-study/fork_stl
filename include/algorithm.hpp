@@ -1,3 +1,4 @@
+// -*- C++ -*-
 
 #ifndef __FROK_STL_ALGORITHM__
 #define __FROK_STL_ALGORITHM__

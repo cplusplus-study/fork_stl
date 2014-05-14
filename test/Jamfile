@@ -10,3 +10,6 @@ exe test_function : test_function.cpp ../lib//gtest ../src//nullc++ ;
 exe test_algorithm : test_algorithm.cpp ../lib//gtest ../src//nullc++ ;
 exe test_memory : test_memory.cpp ../lib//gtest ../src//nullc++ ;
 exe test_vector : test_vector.cpp ../lib//gtest ../src//nullc++ ;
+exe test_deque : test_deque.cpp ../lib//gtest ../src//nullc++ ;
+exe test_list : test_list.cpp ../lib//gtest ../src//nullc++ ;
+exe test_rbtree : test_rbtree.cpp ../lib//gtest ../src//nullc++ ;

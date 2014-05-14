@@ -1,3 +1,4 @@
+// -*- C++ -*-
 
 #ifndef __FORK_STL_VECTOR__
 #define __FORK_STL_VECTOR__
@@ -27,8 +28,9 @@ namespace xusd{
         typedef xusd::reverse_iterator<const_iterator>   const_reverse_iterator;
         typedef std::size_t     size_type;
         typedef std::ptrdiff_t  difference_type;
-        
         typedef Alloc allocator_type;
+        //typedef typename allocator_type::reference       reference;
+        //typedef typename allocator_type::const_reference const_reference;
 
         iterator begin(){ return start; }
         const_iterator begin()const{ return start; }
@@ -81,6 +83,10 @@ namespace xusd{
 
                 this->finish = uninitialized_fill_n(start,n,x);//调用全局的xusd::uninitinalized_fill_n填充数据
             }
+
+        //vector(initializer_list<value_type> il){}
+        //vector(initializer_list<value_type> il, const allocator_type& a){}
+   
         //copy constructor
         vector(vector const&o):data_allocator(o.data_allocator){
             iterator new_start = data_allocator.allocate(o.size());
@@ -156,6 +162,7 @@ namespace xusd{
                 this->start = new_start;
             }
         }
+        void shrink_to_fit(){ } //no operator
 
         reference front(){
             return *(begin());
@@ -305,7 +312,7 @@ namespace xusd{
             if(n<size()){
                 erase(start + n,finish);
             }else{
-                insert(end(),n-size,x);
+                insert(end(),n-size(),x);
             }
         }
 
@@ -334,6 +341,8 @@ namespace xusd{
         iterator end_of_storage;
     };
 
+    template<>
+    class vector<bool>{};
 
 
     template<typename T>

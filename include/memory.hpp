@@ -1,3 +1,5 @@
+// -*- C++ -*-
+
 #ifndef __FORK_STL_MEMORY__
 #define __FORK_STL_MEMORY__
 
