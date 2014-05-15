@@ -5,6 +5,7 @@ exe test_bind : test_bind.cpp ../lib//gtest ../src//nullc++ ;
 exe test_ratio : test_ratio.cpp ../lib//gtest ../src//nullc++ ;
 exe test_chrono : test_chrono.cpp ../lib//gtest ../src//nullc++ ;
 exe test_thread : test_thread.cpp ../lib//gtest ../src//nullc++ ;
+exe test_future : test_future.cpp ../lib//gtest ../src//nullc++ ;
 exe test_iterator : test_iterator.cpp ../lib//gtest ../src//nullc++ ;
 exe test_function : test_function.cpp ../lib//gtest ../src//nullc++ ;
 exe test_algorithm : test_algorithm.cpp ../lib//gtest ../src//nullc++ ;
