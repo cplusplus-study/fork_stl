@@ -2,7 +2,12 @@ project
 	:
 		requirements
 		<include>./include <threading>multi
-		<conditional>@cpp11-rule
+#<toolset>gcc:<cxxflags>-Wextra
+		<toolset>gcc:<cxxflags>-std=c++11
+#<toolset>clang:<cxxflags>-Weverything
+		<toolset>clang:<cxxflags>-std=c++11
+		<toolset>clang:<cxxflags>-fcolor-diagnostics
+#<conditional>@cpp11-rule
 	:
 		default-build
 		<link>static
@@ -26,7 +31,6 @@ rule cpp11-rule ( properties * ) {
     local result ;
     if <toolset>gcc in $(properties) || <toolset>clang in $(properties) {
         result += <cxxflags>-std=c++11 ;
-        result += <cflags>-std=c++11 ;
         result += <linkflags>-std=c++11 ;
     }
     return $(result) ;

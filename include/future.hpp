@@ -18,11 +18,7 @@ namespace xusd {
         any = async | deferred
     };
 
-    enum class future_status {
-        ready,
-        timeout,
-        deferred
-    };
+    enum class future_status { ready, timeout, deferred };
 
     //TODO: 完成该函数
     const std::error_category& future_category();
@@ -36,18 +32,18 @@ namespace xusd {
     // -- __assoc_state {{{
 
     class __assoc_state_base;
-    class __make_assoc_ready_at_thread_exit{
+    class thread_specific_assoc_data{
     public:
-        __make_assoc_ready_at_thread_exit(__assoc_state_base* state):__state_(state){ }
-        ~__make_assoc_ready_at_thread_exit(); // 在__assoc_state_base后面定义, 析构时调用__assoc_state_base::__make_ready()
+        thread_specific_assoc_data(__assoc_state_base* state):__state_(state){ }
+        ~thread_specific_assoc_data(); // 在__assoc_state_base后面定义, 析构时调用__assoc_state_base::__make_ready()
     private:
         __assoc_state_base* __state_;
     };
 
-    //每个线程推出都会调用__make_assoc_ready_at_thread_exit的析构函数.
-    __thread_specific_ptr<__make_assoc_ready_at_thread_exit>&
+    //每个线程推出都会调用thread_specific_assoc_data的析构函数.
+    __thread_specific_ptr<thread_specific_assoc_data>&
     __thread_local_make_assoc_ready_at_thread_exit_data() {
-        static __thread_specific_ptr<__make_assoc_ready_at_thread_exit> __p;
+        static __thread_specific_ptr<thread_specific_assoc_data> __p;
         return __p;
     }
 
@@ -84,7 +80,7 @@ namespace xusd {
                 throw future_error();
             }
             __state_ |= __constructed;
-            __thread_local_make_assoc_ready_at_thread_exit_data().reset(new __make_assoc_ready_at_thread_exit(this));
+            __thread_local_make_assoc_ready_at_thread_exit_data().reset(new thread_specific_assoc_data(this));
             __lk.unlock();
         }
 
@@ -105,7 +101,7 @@ namespace xusd {
                 throw future_error();
             }
             __exception_ = __p;
-            __thread_local_make_assoc_ready_at_thread_exit_data().reset(new __make_assoc_ready_at_thread_exit(this));
+            __thread_local_make_assoc_ready_at_thread_exit_data().reset(new thread_specific_assoc_data(this));
             __lk.unlock();
         }
 
@@ -185,7 +181,7 @@ namespace xusd {
         throw future_error();
     }
 
-    __make_assoc_ready_at_thread_exit::~__make_assoc_ready_at_thread_exit(){
+    thread_specific_assoc_data::~thread_specific_assoc_data(){
         if(__state_){
             __state_->__make_ready();
         }
@@ -218,7 +214,7 @@ namespace xusd {
                 throw future_error();
             ::new(&__value_) _Rp(std::forward<_Arg>(__arg));
             this->__state_ |= __constructed; // not is ready, at thread exit make ready
-            __thread_local_make_assoc_ready_at_thread_exit_data().reset(new __make_assoc_ready_at_thread_exit(this));
+            __thread_local_make_assoc_ready_at_thread_exit_data().reset(new thread_specific_assoc_data(this));
             __lk.unlock();
         }
 
@@ -265,7 +261,7 @@ namespace xusd {
             }
             __value_ = std::addressof(__arg);
             this->__state_ |= __constructed; // has value but not ready
-            __thread_local_make_assoc_ready_at_thread_exit_data().reset(new __make_assoc_ready_at_thread_exit(this));
+            __thread_local_make_assoc_ready_at_thread_exit_data().reset(new thread_specific_assoc_data(this));
             __lk.unlock();
         }
 
