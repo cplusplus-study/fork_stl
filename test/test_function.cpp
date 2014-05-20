@@ -6,6 +6,7 @@
 #include "iterator.hpp"
 #include "functional.hpp"
 #include "algorithm.hpp"
+#include <__function.hpp>
 
 using namespace xusd;
 
@@ -94,7 +95,52 @@ TEST(Functional,compose2){
 }
 
 
-int main(int argc,char* argv[]){
-    testing::InitGoogleTest(&argc, argv);
+int freefun1(){
+    return 755;
+}
+int test_free_fun2 = 0;
+void freefun2(){
+    test_free_fun2 = 1;
+}
+
+int test_free_add(int x, int y, int z){
+
+    return x + y + z;
+}
+TEST(TestFunction, testFreeFunction){
+    xusd::function<int()> f1 = freefun1;
+    EXPECT_EQ(755, f1());
+
+    xusd::function<void()> f2 = freefun2;
+
+    f2();
+    EXPECT_EQ(1, test_free_fun2);
+
+    EXPECT_EQ(6, (xusd::function<int(int,int, int)>(test_free_add)(1, 2, 3)));
+}
+
+class testObjectFunctor{
+public:
+    int add(int x, int y){
+        return x + y;
+    }
+};
+class testFunctor{
+public:
+    int operator()(int x, int y){
+        return x + y;
+    }
+};
+TEST(TestFunction, testMemberFunction){
+    xusd::function<int(testObjectFunctor*, int, int)> of = &testObjectFunctor::add;
+    testObjectFunctor a;
+    EXPECT_EQ(3,(of(&a, 1, 2)));
+    EXPECT_EQ(5,(xusd::function<int(testObjectFunctor&, int, int)>(&testObjectFunctor::add)(a,1,4)));
+    EXPECT_EQ(3, (xusd::function<int(int,int)>(testFunctor())(1, 2)));
+}
+
+
+int main(int argc, char* argv[]){
+    ::testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();
 }
