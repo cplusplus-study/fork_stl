@@ -107,24 +107,6 @@ TEST(TestSelectArgs, Test1){
 }
 
 
-TEST(TestGetResult, Test1){
-    using namespace xusd;
-
-    class Ret;
-    class C;
-    class Args;
-    class Mem;
-    EXPECT_TRUE((std::is_same<void,xusd::base::__get_result_type<void()>::type>::value));
-    EXPECT_TRUE((std::is_same<int,xusd::base::__get_result_type<int(int)>::type>::value));
-    EXPECT_TRUE((std::is_same<const int,xusd::base::__get_result_type<const int()>::type>::value));
-    EXPECT_TRUE((std::is_same<Ret,xusd::base::__get_result_type<Ret(Args)>::type>::value));
-    EXPECT_TRUE((std::is_same<Ret,xusd::base::__get_result_type<Ret(C::*)(Args)>::type>::value));
-    EXPECT_TRUE((std::is_same<Mem&,xusd::base::__get_result_type<Mem(C::*)>::type>::value));
-
-    const MyTest t1;
-    EXPECT_TRUE((std::is_same<int,decltype(t1.memObj)>::value));
-}
-
 #define DT(x) decltype(x)
 TEST(TestBind_t, TestResultType){
     using namespace xusd;

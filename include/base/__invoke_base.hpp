@@ -8,28 +8,6 @@
 namespace xusd{
 namespace base{
 
-template<typename F>
-struct __get_result_type;
-
-template<typename R, typename... Args>
-struct __get_result_type<R(Args...)>{ typedef R type; };
-template<typename R, typename... Args>
-struct __get_result_type<R(*)(Args...)>{ typedef R type; };
-template<typename R, typename... Args>
-struct __get_result_type<R(&)(Args...)>{ typedef R type; };
-
-template<typename Mem,typename C>
-struct __get_result_type<Mem(C::*)>{ typedef decltype(((C*)0)->*((Mem(C::*))0)) type; typedef C class_type; };
-template<typename R,typename C, typename... Args>
-struct __get_result_type<R(C::*)(Args...)>{ typedef R type;  typedef C class_type; };
-template<typename R,typename C, typename... Args>
-struct __get_result_type<R(C::*)(Args...)const>{ typedef R type;  typedef C class_type; };
-template<typename R,typename C, typename... Args>
-struct __get_result_type<R(C::*)(Args...)volatile>{ typedef R type;  typedef C class_type; };
-template<typename R,typename C, typename... Args>
-struct __get_result_type<R(C::*)(Args...)const volatile>{ typedef R type;  typedef C class_type; };
-
-
 // __invoke(F, Args...)
 template<typename F, typename... Args>
 auto __invoke(F&& __f, Args&&... args)

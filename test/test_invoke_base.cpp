@@ -2,18 +2,6 @@
 #include <base/__invoke_base.hpp>
 #include <gtest/gtest.h>
 
-TEST(TestInvokeBase, __get_result_type){
-
-    class A{}; class B{}; class C{}; class D{};
-    EXPECT_TRUE((std::is_same< A, xusd::base::__get_result_type< A( B)>::type>::value));
-    EXPECT_TRUE((std::is_same< A, xusd::base::__get_result_type< A(&)( B)>::type>::value));
-    EXPECT_TRUE((std::is_same< A, xusd::base::__get_result_type< A(*)( B)>::type>::value));
-
-    EXPECT_TRUE((std::is_same< A, xusd::base::__get_result_type< A(C::*)( B)>::type>::value));
-    EXPECT_TRUE((std::is_same< A, xusd::base::__get_result_type< A(C::*)( B)const>::type>::value));
-    EXPECT_TRUE((std::is_same< A, xusd::base::__get_result_type< A(C::*)( B)volatile>::type>::value));
-    EXPECT_TRUE((std::is_same< A, xusd::base::__get_result_type< A(C::*)( B)const volatile>::type>::value));
-}
 
 int test_add(int a, int b){
     return a + b;
