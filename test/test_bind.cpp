@@ -551,6 +551,29 @@ TEST(TestBind2, TestFunctionObject){
     ASSERT_EQ(10, f1(2));
 }
 
+
+class AAAA{
+public:
+    virtual int fun(){
+        return 1;
+    }
+};
+class BBBB:public AAAA{
+public:
+    virtual int fun(){
+        return 2;
+    }
+};
+
+
+TEST(TestBind2, TestVirtualFunction){
+    AAAA a;
+    BBBB b;
+    auto f1 = xusd::bind(&AAAA::fun, xusd::_1);
+    EXPECT_EQ((f1(&a)), 1);
+    EXPECT_EQ((f1(&b)), 2);
+}
+
 int main(int argc, char* argv[]){
 
     ::testing::InitGoogleTest(&argc, argv);

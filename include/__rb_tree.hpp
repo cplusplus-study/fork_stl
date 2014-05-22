@@ -383,7 +383,7 @@ public:
     rb_tree(Compare const& comp = Compare()):node_count(0),key_compare(comp){
         init();
     }
-    rb_tree(rb_tree const& tree){
+    rb_tree(rb_tree const& tree):node_count(0){
         init();
     }
 

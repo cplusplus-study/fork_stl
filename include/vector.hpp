@@ -246,7 +246,7 @@ namespace xusd{
         }
 
         void insert(iterator position,size_type n, value_type const& x){
-            if(n <= 0) return ;
+            //if(n <= 0) return ;
             if(size()+n > capacity()){//容量不够时候
                 const size_type old_size = size();
                 const size_type len = size() + n;

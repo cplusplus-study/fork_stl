@@ -236,7 +236,7 @@ namespace xusd{
         reverse_iterator(reverse_iterator<Iterator> const& o):base_iterator(o.base_iterator){}
         template<typename I>
         reverse_iterator(reverse_iterator<I>& o):base_iterator(o.base_iterator){}//主要是应用于像,iterator=>const_iterator的转换
-        reverse_iterator& operator=(reverse_iterator<Iterator> const& o){ base_iterator = o.base_iterator; }
+        reverse_iterator& operator=(reverse_iterator<Iterator> const& o){ base_iterator = o.base_iterator; return *this; }
         Iterator base()const{
             return base_iterator;
         }

@@ -14,3 +14,6 @@ exe test_vector : test_vector.cpp ../lib//gtest ../src//nullc++ ;
 exe test_deque : test_deque.cpp ../lib//gtest ../src//nullc++ ;
 exe test_list : test_list.cpp ../lib//gtest ../src//nullc++ ;
 exe test_rbtree : test_rbtree.cpp ../lib//gtest ../src//nullc++ ;
+exe test_lambda_to_func : test_lambda_to_func.cpp ../lib//gtest ../src//nullc++ ;
+exe test_function_traits : test_function_traits.cpp ../lib//gtest ../src//nullc++ ;
+

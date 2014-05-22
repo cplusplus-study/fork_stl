@@ -443,7 +443,7 @@ namespace xusd {
                 return time_t(duration_cast<seconds>(__t.time_since_epoch()).count());
             }
             static time_point from_time_t(time_t __t) noexcept{
-                return system_clock::time_point(seconds(__t));
+                return time_point(seconds(__t));
             }
         };
 

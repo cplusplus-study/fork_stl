@@ -13,6 +13,7 @@
 using namespace xusd;
 
 struct test_op{
+    test_op():num(0){ }
     void operator()(int &a){ 
         a += 1;
         num = num +1;

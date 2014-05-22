@@ -267,6 +267,7 @@ namespace xusd{
             xusd::uninitialized_copy(d.begin(),d.end(),start_of_storage);
             _start = 0;
             _end = _start + d.size();
+            return *this;
         }
 
         Alloc get_allocator(){
