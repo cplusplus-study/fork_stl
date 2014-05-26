@@ -12,7 +12,7 @@
  *
  * ****************************************************/
 
-#include "./BOOL.h"
+#include "./BOOL.hpp"
 #
 #define NULL_PP_NOR(x, y) MY_NOR_I(x, y)
 #define NULL_PP_NOR_I(x, y) MY_BIT_NOR(MY_BOOL(x), MY_BOOL(y))

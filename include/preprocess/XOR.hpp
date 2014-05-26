@@ -11,7 +11,7 @@
  *
  * ****************************************************/
 
-#include "./BOOL.h"
+#include "./BOOL.hpp"
 #
 #define NULL_PP_XOR(x, y) MY_XOR_I(x, y)
 #define NULL_PP_XOR_I(x, y) MY_BIT_XOR(MY_BOOL(x), MY_BOOL(y))

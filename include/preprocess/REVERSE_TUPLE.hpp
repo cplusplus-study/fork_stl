@@ -1,9 +1,9 @@
 
 #ifndef __FORK_STL_REVERSE_HPP__
 #define __FORK_STL_REVERSE_HPP__
-#include "CAT.h"
-#include "VARIADICS_SIZE.h"
-#include "OVERLOAD.h"
+#include "CAT.hpp"
+#include "VARIADICS_SIZE.hpp"
+#include "OVERLOAD.hpp"
 
 #define NULL_PP_REVERSE(...) MY_REVERSE_I(__VA_ARGS__)
 #define NULL_PP_REVERSE_I(...) MY_OVERLOAD(MY_REVERSE_,__VA_ARGS__)(__VA_ARGS__)

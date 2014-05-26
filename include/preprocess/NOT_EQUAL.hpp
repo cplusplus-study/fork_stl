@@ -1,9 +1,9 @@
 
 #ifndef __FORK_STL_NOT_EQ_HPP__
 #define __FORK_STL_NOT_EQ_HPP__
-#include "BOOL.h"
-#include "CAT.h"
-#include "IF.h"
+#include "BOOL.hpp"
+#include "CAT.hpp"
+#include "IF.hpp"
 #
 #define NULL_PP_NOT_EQUAL(x, y) MY_NOT_EQUAL_I(x, y)
 #

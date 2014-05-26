@@ -1,6 +1,6 @@
 #ifndef __FORK_STL_IF_HPP__
 #define __FORK_STL_IF_HPP__
-#include "BOOL.h"
+#include "BOOL.hpp"
 #
 #
 # /**/

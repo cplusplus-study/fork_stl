@@ -1,7 +1,7 @@
 
 #ifndef __FORK_STL_VARIADICS_ELEM_HPP__
 #define __FORK_STL_VARIADICS_ELEM_HPP__
-#include "CAT.h"
+#include "CAT.hpp"
 #
 #define NULL_PP_VARIADICS_ELEM(n,...) MY_VARIADICS_ELEM_I(n,__VA_ARGS__)
 #define NULL_PP_VARIADICS_ELEM_I(n,...) MY_CAT(MY_VARIADICS_ELEM_,n(__VA_ARGS__))

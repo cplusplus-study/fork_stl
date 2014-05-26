@@ -11,8 +11,8 @@
  *
  * ****************************************************/
 
-#include "./COMPL.h"
-#include "./BOOL.h"
+#include "./COMPL.hpp"
+#include "./BOOL.hpp"
 #
 #define NULL_PP_NOT(X) MY_NOT_I(X)
 #define NULL_PP_NOT_I(X) MY_COMPL(MY_BOOL(X))
