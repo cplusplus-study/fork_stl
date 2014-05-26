@@ -1,144 +1,144 @@
-MyCPP
+NULL_PP
 ============
 
-**A strong c/c++ preprocessing library(一个强大的c/c++预处理库)**
+**A c/c++ preprocessing library(一个c/c++预处理库)**
 
 ## 一、基本工具 ##
 
-### 1.MY\_CAT ###
+### 1.NULL_PP_CAT ###
 
-	MY_CAT(x, y) ==> x ## y (x,y先进行扩展)
+	NULL_PP_CAT(x, y) ==> x ## y (x,y先进行扩展)
 
-	MY_CAT(1,2) ==> 12
-	MY_CAT(MY_, AND(0,1)) ==> 0
-	MY_CAT(MY_, OR(0,1)) ==> 1
+	NULL_PP_CAT(1,2) ==> 12
+	NULL_PP_CAT(NULL_PP_, AND(0,1)) ==> 0
+	NULL_PP_CAT(NULL_PP_, OR(0,1)) ==> 1
 
 
-### 2.MY\_STR ###
+### 2.NULL_PP_STR ###
 
-	MY_STR(x) ==> #x (x会先展开)
+	NULL_PP_STR(x) ==> #x (x会先展开)
 
-	MY_STR(1) ==> "1"
-	MY_STR(MY_BOO(7)) ==> "1"
-	MY_STR(MY_CAT(MY_,BOO(0))) ==> "0"
+	NULL_PP_STR(1) ==> "1"
+	NULL_PP_STR(NULL_PP_BOO(7)) ==> "1"
+	NULL_PP_STR(NULL_PP_CAT(NULL_PP_,BOO(0))) ==> "0"
 
 
 ## 二、布尔运算 ##
 
-### 1.MY\_BOOL ###
+### 1.NULL_PP_BOOL ###
 
-	MY_BOOL(x) ==> if x != 0 then 1 else 0 fi
+	NULL_PP_BOOL(x) ==> if x != 0 then 1 else 0 fi
 	(0 <= x < 256)
 
-	MY_BOOL(0) ==> 0
-	MY_BOOL(1) ==> 1
+	NULL_PP_BOOL(0) ==> 0
+	NULL_PP_BOOL(1) ==> 1
 		.
 		.
 		.
-	MY_BOOL(255) ==> 1
+	NULL_PP_BOOL(255) ==> 1
 
 
-### 2.MY\_AND ###
+### 2.NULL_PP_AND ###
 
-	MY_AND(x, y) ==> MY_AND(MY_BOOL(x), MY_BOOL(y))
+	NULL_PP_AND(x, y) ==> NULL_PP_AND(NULL_PP_BOOL(x), NULL_PP_BOOL(y))
 	(0 <= x,y < 256)
 
-	MY_AND(0,0) ==> 0
-	MY_AND(1,0) ==> 0
-	MY_AND(0,1) ==> 0
-	MY_AND(1,1) ==> 1
+	NULL_PP_AND(0,0) ==> 0
+	NULL_PP_AND(1,0) ==> 0
+	NULL_PP_AND(0,1) ==> 0
+	NULL_PP_AND(1,1) ==> 1
 
 
-### 3.MY\_OR ###
+### 3.NULL_PP_OR ###
 
-	MY_OR(x, y) ==> MY_OR(MY_BOOL(x), MY_BOOL(y))
+	NULL_PP_OR(x, y) ==> NULL_PP_OR(NULL_PP_BOOL(x), NULL_PP_BOOL(y))
 	(0 <= x,y < 256)
 
-	MY_OR(0,0) ==> 0
-	MY_OR(1,0) ==> 1
-	MY_OR(0,1) ==> 1
-	MY_OR(1,1) ==> 1
+	NULL_PP_OR(0,0) ==> 0
+	NULL_PP_OR(1,0) ==> 1
+	NULL_PP_OR(0,1) ==> 1
+	NULL_PP_OR(1,1) ==> 1
 
 
-### 4.MY\_NOT ###
+### 4.NULL_PP_NOT ###
 
-	MY_NOT(x) ==> MY_NOT(MY_BOOL(x))
+	NULL_PP_NOT(x) ==> NULL_PP_NOT(NULL_PP_BOOL(x))
 	(0 <= x < 256)
 
-	MY_NOT(0) ==> 1
-	MY_NOT(1) ==> 0
+	NULL_PP_NOT(0) ==> 1
+	NULL_PP_NOT(1) ==> 0
 
 
-### 5.MY\_NOR ###
+### 5.NULL_PP_NOR ###
 
-	MY_NOR(x,y) ==> MY_NOR(MY_BOOL(x), MY_BOOL(y))
-	MY_NOR(x,y) <==> MY_NOT(MY_AND(x, y))
+	NULL_PP_NOR(x,y) ==> NULL_PP_NOR(NULL_PP_BOOL(x), NULL_PP_BOOL(y))
+	NULL_PP_NOR(x,y) <==> NULL_PP_NOT(NULL_PP_AND(x, y))
 	(0 <= x,y < 256)
 
-	MY_NOR(0,0) ==> 1
-	MY_NOR(1,0) ==> 0
-	MY_NOR(0,1) ==> 0
-	MY_NOR(1,1) ==> 0
+	NULL_PP_NOR(0,0) ==> 1
+	NULL_PP_NOR(1,0) ==> 0
+	NULL_PP_NOR(0,1) ==> 0
+	NULL_PP_NOR(1,1) ==> 0
 
 
-### 6.MY\_XOR(x,y) ###
+### 6.NULL_PP_XOR(x,y) ###
 
-	MY_XOR(x,y) ==> MY_XOR(MY_BOOL(x), MY_BOOL(y))
+	NULL_PP_XOR(x,y) ==> NULL_PP_XOR(NULL_PP_BOOL(x), NULL_PP_BOOL(y))
 	(0 <= x,y < 256)
 
-	MY_XOR(0,0) ==> 0
-	MY_XOR(1,0) ==> 1
-	MY_XOR(0,1) ==> 1
-	MY_XOR(1,1) ==> 0
+	NULL_PP_XOR(0,0) ==> 0
+	NULL_PP_XOR(1,0) ==> 1
+	NULL_PP_XOR(0,1) ==> 1
+	NULL_PP_XOR(1,1) ==> 0
 
 
 ## 三、比较运算 ##
 
-### 1.MY\_NOT\_EQUAL ###
+### 1.NULL_PP_NOT\_EQUAL ###
 
-	MY_NOT_EQUAL(x, y) ==> x != y ? 1 : 0;
+	NULL_PP_NOT_EQUAL(x, y) ==> x != y ? 1 : 0;
 	(0 <= x,y < 256)
 
-	MY_NOT_EQUAL(0, 0) ==> 0
-	MY_NOT_EQUAL(1, 0) ==> 1
-	MY_NOT_EQUAL(7, 8) ==> 1
+	NULL_PP_NOT_EQUAL(0, 0) ==> 0
+	NULL_PP_NOT_EQUAL(1, 0) ==> 1
+	NULL_PP_NOT_EQUAL(7, 8) ==> 1
 
-### 2.MY\_EQUAL ###
+### 2.NULL_PP_EQUAL ###
 
-	MY_EQUAL(x, y) ==> x == y ? 1 : 0;
+	NULL_PP_EQUAL(x, y) ==> x == y ? 1 : 0;
 	(0 <= x,y < 256)
 
-	MY_EQUAL(0, 0) ==> 1
-	MY_EQUAL(1, 0) ==> 0
-	MY_EQUAL(7, 8) ==> 0
+	NULL_PP_EQUAL(0, 0) ==> 1
+	NULL_PP_EQUAL(1, 0) ==> 0
+	NULL_PP_EQUAL(7, 8) ==> 0
 
 
 ## 四、算数运算 ##
 
-### 1.MY\_INC ###
+### 1.NULL_PP_INC ###
 
-	MY_INC(x) ==> x + 1 (0 <= x < 256)
+	NULL_PP_INC(x) ==> x + 1 (0 <= x < 256)
 
-	MY_INC(0) ==> 1
-	MY_INC(1) ==> 2
+	NULL_PP_INC(0) ==> 1
+	NULL_PP_INC(1) ==> 2
 		.
 		.
 		.
-	MY_INC(255) ==> 256
-	MY_INC(256) ==> 256
+	NULL_PP_INC(255) ==> 256
+	NULL_PP_INC(256) ==> 256
 
 
-### 2.MY\_DEC ###
+### 2.NULL_PP_DEC ###
 
-	MY_DEC(x) ==> x + 1 (0 < x <= 256)
+	NULL_PP_DEC(x) ==> x + 1 (0 < x <= 256)
 
-	MY_DEC(0) ==> 0
-	MY_DEC(1) ==> 0
-	MY_DEC(2) ==> 1
+	NULL_PP_DEC(0) ==> 0
+	NULL_PP_DEC(1) ==> 0
+	NULL_PP_DEC(2) ==> 1
 		.
 		.
 		.
-	MY_DEC(256) ==> 255
+	NULL_PP_DEC(256) ==> 255
 
 
 (未完)

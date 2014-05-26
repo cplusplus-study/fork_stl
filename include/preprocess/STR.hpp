@@ -8,8 +8,8 @@
  *
  * ****************************************************/
 
-#define MY_STR(x) MY_STR_I(x)
-#define MY_STR_I(x) # x
+#define NULL_PP_STR(x) MY_STR_I(x)
+#define NULL_PP_STR_I(x) # x
 
 #endif
 

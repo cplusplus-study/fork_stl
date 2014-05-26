@@ -4,8 +4,8 @@
 #include "NOT_EQUAL.h"
 #include "BOOL.h"
 #
-#define MY_EQUAL(x, y) MY_EQUAL_I(x, y)
-#define MY_EQUAL_I(x, y) MY_COMPL(MY_BOOL(MY_NOT_EQUAL(x, y)))
+#define NULL_PP_EQUAL(x, y) MY_EQUAL_I(x, y)
+#define NULL_PP_EQUAL_I(x, y) MY_COMPL(MY_BOOL(MY_NOT_EQUAL(x, y)))
 #
 #
 #endif
