@@ -1,1 +1,1 @@
-lib nullc++ : [ glob *.cpp ] ;
+lib nullc++ : [ glob-tree *.cpp *.CPP *.cxx *.CXX *.cc *.CC *.c *.C ] ;

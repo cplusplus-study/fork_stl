@@ -144,7 +144,7 @@ struct tuple_replace<From, To, std::tuple<From, Elements...>>{
 };
 template<typename From,typename To, typename T, typename ...Elements>
 struct tuple_replace<From, To, std::tuple<T, Elements...>>{
-    using type = typename tuple_prefix<T, tuple_replace<From, To, std::tuple<Elements...>>::type>::type;
+    using type = typename tuple_prefix<T, typename tuple_replace<From, To, std::tuple<Elements...>>::type>::type;
 };
 
 } //namespace xusd
