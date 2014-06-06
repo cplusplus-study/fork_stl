@@ -64,8 +64,8 @@ namespace xusd{
 
     template <typename F, typename... Args>
     bind_t<typename std::decay<F>::type, typename std::decay<Args>::type...>
-    bind(F f, Args&&... args){
-        return bind_t< typename std::decay<F>::type, typename std::decay<Args>::type...>(f, args...);
+    bind(F&& f, Args&&... args){
+        return bind_t< typename std::decay<F>::type, typename std::decay<Args>::type...>(std::forward<F>(f), std::forward<Args>(args)...);
     }
 
     extern placeholder<1> _1; extern placeholder<2> _2; extern placeholder<3> _3; extern placeholder<4> _4;
